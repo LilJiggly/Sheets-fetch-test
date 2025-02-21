@@ -3,17 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin: 50px;
+    <title>Dynamic Content from Google Sheets</title>
+    <script>
+      async function fetchData() {
+        const sheetURL =
+          "https://script.google.com/macros/s/AKfycbykgPasCTiSA2AmhotyCPdnUYDEzzN7ZNyWZK-i093F8r5JxUb4XYgtbTJU1ZRcQHQG/exec"; // Replace with your Google Apps Script URL
+        try {
+          const response = await fetch(sheetURL);
+          const data = await response.json();
+
+          let contentContainer = document.getElementById("content");
+          contentContainer.innerHTML = ""; // Clear existing content
+
+          data.forEach((item) => {
+            let h2 = document.createElement("h2");
+            h2.textContent = item.h2;
+
+            let p = document.createElement("p");
+            p.textContent = item.p;
+
+            contentContainer.appendChild(h2);
+            contentContainer.appendChild(p);
+          });
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
       }
-    </style>
+
+      window.onload = fetchData;
+    </script>
   </head>
   <body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to my simple webpage. This is just a basic example.</p>
+    <h1>Content from Google Sheets</h1>
+    <div id="content">
+      <p>Loading...</p>
+    </div>
   </body>
 </html>
